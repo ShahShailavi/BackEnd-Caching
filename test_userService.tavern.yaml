@@ -1,0 +1,91 @@
+---
+
+test_name: Try to change the password for a user that does not exist
+
+stages:
+  - name: Make sure that user does not allow to change password if it does not exists
+    request:
+      url: http://localhost/updatepassword
+      auth:
+        - tamanna@gmail.com
+        - sss
+      json:
+        new_password: ttt
+      method: PATCH
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Create User
+
+stages:
+  - name: Make sure that user is created
+    request:
+      url: http://localhost/createuser
+      json:
+        name: tamanna
+        username: tamanna@gmail.com
+        userpassword: ttt
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Change the user's password
+
+stages:
+  - name: Make sure that user can change the password
+    request:
+      url: http://localhost/updatepassword
+      auth:
+        - tamanna@gmail.com
+        - ttt
+      json:
+        new_password: zzz
+      method: PATCH
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+---
+
+test_name: Delete the user
+
+stages:
+  - name: Make sure that user is deleted
+    request:
+      url: http://localhost/deleteuser
+      auth:
+        - tamanna@gmail.com
+        - zzz
+      method: DELETE
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+#---
+
+# test_name: Try to change the password for the deleted user
+#
+# stages:
+#   - name: Make sure that if user doesn't exist, then password should not update
+#     request:
+#       url: http://localhost/updatepassword
+#       auth:
+#         - tamanna@gmail.com
+#         - zzz
+#       json:
+#         new_password: ttt
+#       method: PATCH
+#       headers:
+#         content-type: application/json
+#     response:
+#       status_code: 401

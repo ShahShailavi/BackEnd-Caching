@@ -1,0 +1,72 @@
+-- To  start nginx service
+sudo service nginx start
+
+-- To restart nginx service
+sudo service nginx restart
+
+-- Open default file for nginx configuration
+sudo vi default
+
+-- start foreman service with different micro service instances
+foreman start --formation user=3,comment=3,article=3,tags=3,rssfeed=3
+
+-- Curl Commands
+Create User:
+curl -i -H "Content-Type: application/json" -X POST -d '{"name":"shailavi", "username":"shailavi@gmail.com", "userpassword":"sss"}' http://localhost/createuser
+
+Delete User:
+curl -i -u shailavi@gmail.com:sss -H "Content-Type: application/json" -X DELETE http://localhost/deleteuser
+
+Update Password:
+curl -i -u shailavi@gmail.com:sss -H "Content-Type: application/json" -X PATCH http://localhost/updatepassword -d '{"new_password":"ttt"}'
+
+Post Article:
+curl -i -u shailavi@gmail.com:ttt -H "Content-Type:application/json" -X POST http://localhost/postarticle -d '{"articletitle":"Java Tutorial", "articlecontent":"Java Contents"}'
+
+Post Article without authentication:
+curl -i -H "Content-Type:application/json" -X POST http://localhost/postarticle -d '{"articletitle":"Java Tutorial", "articlecontent":"Java Contents"}'
+
+Retrieve Article:
+curl -i -H "Content-Type:application/json" -X GET http://localhost/retrieveArticle/Java%20Tutorial
+
+Edit Article:
+curl -i -u shailavi@gmail.com:ttt -H "Content-Type:application/json" -X PATCH http://localhost/editarticle -d '{"articletitle":"Java Tutorial","articlecontent":"New Java Learning Contents"}'
+
+Delete Article:
+curl -i -u shailavi@gmail.com:ttt -H "Content-Type:application/json" -X DELETE http://localhost/deletearticle -d '{"articletitle":"Java Tutorial"}'
+
+Retrieve most Recent Articles
+curl -i -H "Content-Type:application/json" -X GET http://localhost/retrivenrecentarticle/1
+
+Retrieve Metadata
+curl -i -H "Content-Type:application/json" -X GET http://localhost/retrivemetadata/5
+
+Add Comment:
+curl -i -u shailavi@gmail.com:ttt -H "Content-Type:application/json" -X POST http://localhost/addcomment/Java%20Tutorial -d '{"comment":"It was worst tutorial"}'
+
+Delete Comment:
+curl -i -u shailavi@gmail.com:ttt -H "Content-Type:application/json" -X DELETE http://localhost/deletecomment -d '{"id":"2"}'
+
+Retrieve number of comments of single article
+curl -i -H "Content-Type:application/json" -X GET http://localhost/comments/count/Java%20Tutorial
+
+Retrieve n most recent comment
+curl -i -H "Content-Type:application/json" -X GET http://localhost/retrievearticle/Java%20Tutorial/3
+
+Add tags
+curl -u shailavi@gmail.com:ttt -H "Content-Type: application/json" -X POST http://localhost/tag/addtag -d '{"tag":"denver","articleId":"1"}'
+curl -u shailavi@gmail.com:ttt -H "Content-Type: application/json" -X POST http://localhost/tag/addtag -d '{"tag":"denverss","articleId":"1"}'
+
+To get list of tags for article
+curl -u shailavi@gmail.com:ttt -H "Content-Type: application/json" -X GET http://localhost/tag/gettag/1
+
+Delete the tag for particular article
+curl -u shailavi@gmail.com:ttt -H "Content-Type: application/json" -X DELETE http://localhost/tag/deletetag  -d '{"tag":"denver","articleId":"1"}'
+
+To get list of articles for given tag
+curl -u shailavi@gmail.com:ttt -H "Content-Type: application/json" -X GET http://localhost/tag/getarticles/denverss
+
+rssfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/summaryfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/commentfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/metafeed

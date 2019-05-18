@@ -1,0 +1,57 @@
+---
+
+test_name: Try to add a comment to an article that does not exists
+
+stages:
+  - name: Make sure that user is not able to add comment if article does not exists
+    request:
+      url: http://localhost/addcomment/SQLite%20Tutorial
+      auth:
+        - shailavi@gmail.com
+        - sss
+      json:
+        comment: This Tutotial is good
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 404
+
+---
+
+test_name: Post an authenticated comment on an article
+
+stages:
+  - name: Make sure that user is not able to add comment if article does not exists
+    request:
+      url: http://localhost/addcomment/Java%20Tutorials
+      auth:
+        - shailavi@gmail.com
+        - sss
+      json:
+        comment: This Tutorial is very helpful
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Check that the newly posted article is the most recent
+
+stages:
+  - name: Make sure that the newly posted article matches with the recent article based on its ID
+    request:
+      url: http://localhost/retrievearticle/Java%20Tutorials/1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      body:
+        [
+          {
+            "comment": "This Tutorial is very helpful"
+          }
+        ]

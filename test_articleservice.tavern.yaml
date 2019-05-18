@@ -1,0 +1,109 @@
+---
+
+test_name: Creating user for below article
+
+stages:
+  - name: Make sure that user is created
+    request:
+      url: http://localhost/createuser
+      json:
+        name: shailavi
+        username: shailavi@gmail.com
+        userpassword: sss
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Try to post an article without authenticating
+
+stages:
+  - name: Make sure that user should not post article till authenticaton
+    request:
+      url: http://localhost/postarticle
+      json:
+        articletitle: Java Tutorial
+        articlecontent: Java Contents
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Try to post an article using wrong password
+
+stages:
+  - name: Make sure that user should allowed to post article
+    request:
+      url: http://localhost/postarticle
+      auth:
+        - shailavi@gmail.com
+        - hjk
+      json:
+        articletitle: Java Tutorial
+        articlecontent: Java Contents
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Post an article successfully
+
+stages:
+  - name: Make sure the user can post article
+    request:
+      url: http://localhost/postarticle
+      auth:
+        - shailavi@gmail.com
+        - sss
+      json:
+        articletitle: Java Tutorials
+        articlecontent: Java Contents
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Retrive newly post article
+
+stages:
+  - name: Make sure user can get newly posted article
+    request:
+      url: http://localhost/retrivenrecentarticle/1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+---
+
+test_name: Check that the newly posted article is the most recent
+
+stages:
+  - name: Make sure that the newly posted article matches with the recent article based on its ID
+    request:
+      url: http://localhost/retrivenrecentarticle/1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      body:
+        [
+          {
+            "title": "Java Tutorials",
+            "content": "Java Contents",
+          }
+        ]

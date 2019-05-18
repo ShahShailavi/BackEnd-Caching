@@ -1,0 +1,99 @@
+---
+  test_name : Add an article with a new tag
+  stages:
+    - name: adding a new tag with an article id
+      request:
+        url: http://localhost/tag/addtag
+        auth:
+          - shailavi@gmail.com
+          - sss
+        json:
+          tag: webbackend
+          articleId: 1
+        method: POST
+        headers:
+          content-type: application/json
+      response:
+        status_code: 201
+---
+  test_name : Add a tag to an article that doesn't exist
+  stages:
+    - name: connect tag and article id which is not in table
+      request:
+        url: http://localhost/tag/addTags
+        auth:
+          - shailavi@gmail.com
+          - sss
+        json:
+          tag: first
+          articleId: 9999
+        method: POST
+        headers:
+          content-type: application/json
+      response:
+        status_code: 404
+---
+
+  test_name : List all articles with the new tag
+  stages:
+    - name: get article id for input tag name
+      request:
+        url: http://localhost/tag/getarticles/webbackend
+        method: GET
+        headers:
+          content-type: application/json
+      response:
+        status_code: 200
+
+---
+  test_name : Add another tag to the article
+  stages:
+    - name: connect tag and article id
+      request:
+        url: http://localhost/tag/addtag
+        auth:
+          - shailavi@gmail.com
+          - sss
+        json:
+          tag: calstatefullerton
+          articleId: 1
+        method: POST
+        headers:
+          content-type: application/json
+      response:
+        status_code: 201
+
+---
+  test_name : Delete one of the tags from the article
+  stages:
+    - name: delete entry from tag_article table
+      request:
+        url: http://127.0.0.1:5300/tag/deletetag
+        auth:
+          - shailavi@gmail.com
+          - sss
+        json:
+          tag: webbackend
+          articleId: 1
+        method: DELETE
+        headers:
+          content-type: application/json
+      response:
+        status_code: 200
+
+    - name: delete entry from tag_article table
+      request:
+        url: http://127.0.0.1:5300/tag/deletetag
+        auth:
+          - shailavi@gmail.com
+          - sss
+        json:
+          tag: calstatefullerton
+          articleId: 1
+        method: DELETE
+        headers:
+          content-type: application/json
+      response:
+        status_code: 200
+
+---
