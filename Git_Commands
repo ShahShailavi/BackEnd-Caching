@@ -1,0 +1,62 @@
+-- Installation steps
+	sudo apt install --yes docker.io
+	sudo usermod -aG docker $USER
+	docker run --name scylla -d scylladb/scylla --smp 1 --memory 1G --overprovisioned 1 --developer-mode 1 --experimental 1
+	ocker exec -it scylla nodetool status
+	
+-- Start Docker
+	docker start scylla
+	docker exec -it scylla cqlsh
+
+-- Create database
+	CREATE KEYSPACE IF NOT EXISTS article_database WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 1 };
+	use article_database;
+	
+-- driver install
+	pip install cassandra-driver
+	
+curl commands
+
+-- create user
+	curl -i -H "Content-Type: application/json" -X POST -d '{"name":"sneha", "username":"sneha@gmail.com", "userpassword":"xxx"}' http://localhost/createuser
+	
+-- delete user
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type: application/json" -X DELETE http://localhost/deleteuser
+
+-- update password
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type: application/json" -X PATCH http://localhost/updatepassword -d '{"new_password":"ttt"}'  
+	
+-- Post Article
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type:application/json" -X POST http://localhost/postarticle -d '{"articletitle":"Java Tutorial", "articlecontent":"Java Contents"}'
+	
+-- Retrive Article
+	curl -i -H "Content-Type:application/json" -X GET http://localhost/retrieveArticle/Java%20Tutorial
+	
+-- Edit Article
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type:application/json" -X PATCH http://localhost/editarticle -d '{"articletitle":"Java Tutorial","articlecontent":"New Machine Learning Contents"}'
+	
+-- Retrive Recent Article
+	curl -i -H "Content-Type:application/json" -X GET http://localhost/retrivenrecentarticle/1
+	
+-- Retrive Metadat
+	curl -i -H "Content-Type:application/json" -X GET http://localhost/retrivemetadata/5
+	
+-- Delete Article
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type:application/json" -X DELETE http://localhost/deletearticle -d '{"articletitle":"Java Tutorial"}'
+	
+-- Add comment
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type:application/json" -X POST http://localhost/addcomment/Java%20Tutorial -d '{"comment":"It was worst tutorial"}'
+	
+-- Delete Comment
+	curl -i -u sneha@gmail.com:xxx -H "Content-Type:application/json" -X DELETE http://localhost/deletecomment -d '{"id":"2"}'
+	
+-- Retrieve number of comments of single article
+	curl -i -H "Content-Type:application/json" -X GET http://localhost/comments/count/Java%20Tutorial
+	
+-- Retrive most recent comment
+	curl -i -H "Content-Type:application/json" -X GET http://localhost/retrievearticle/Java%20Tutorials/3
+	
+-- rssfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/summaryfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/commentfeed
+curl -i -H "Content-Type:application/json" -X GET http://localhost/metafeed
